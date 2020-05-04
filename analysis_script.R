@@ -144,7 +144,7 @@ summary(model_spillover)
 joined_data_ro %>%
   ggplot(aes(x = spillover, y = mean_goodness))+
   geom_smooth(method = "lm")
-
+ 
 # Truth Start ####
 
 dataT <- read_csv("questionnaire_data/Explanation_TRUTH.csv")
