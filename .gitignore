@@ -37,3 +37,6 @@ vignettes/*.pdf
 
 # Old stuff
 old/
+
+# extra stuff
+both_predictors.R
