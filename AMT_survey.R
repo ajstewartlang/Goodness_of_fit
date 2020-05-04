@@ -73,8 +73,8 @@ resultsT <- c(strongT, weakT)
 
 cor.test(results, resultsT)
 
-# Andrew's code below ####
-# Explanatory goodness
+# Andrew's code below
+# Explanatory goodness ####
 
 summary <- dat %>% 
   pivot_longer(cols = colnames(dat)[23:58], names_to = "Item", values_to = "Score") %>%
@@ -162,6 +162,91 @@ model_spillover <- lmer(spillover ~ mean_score + (1 | P.s) + (1 | Item), data = 
 summary(model_spillover)
 check_model(model_spillover)
 
-#Truth
+#Truth ####
+summary <- datT %>% 
+  pivot_longer(cols = colnames(datT)[23:58], names_to = "Item", values_to = "Score") %>%
+  select(Item, Score) %>%
+  mutate(Item = factor(Item),
+         Score = as.integer(Score)) %>%
+  filter(!is.na(Score)) %>%
+  group_by(Item) %>%
+  summarise(mean_score = mean(Score)) 
+
+summary$Item <- str_replace(summary$Item, "A_", "_A-")
+summary$Item <- str_replace(summary$Item, "B_", "_B-")
+
+summary <- summary %>%
+  separate(col = Item, into = c("Item", "Condition"), sep = "_") 
+
+summary$Condition <- str_replace(summary$Condition, "A-acceptance", "High")
+summary$Condition <- str_replace(summary$Condition, "B-acceptance", "Low")
+
+ready_to_combine <- summary %>%
+  unite(col = "Item_Condition", c(Item, Condition), sep="_")
+
+# Read in and combine with eye-tracking data
+
+# First pass
+first_pass <- read_csv("eye_data/FPs_plus_ratings.csv") %>%
+  unite(col = "Item_Condition", c(Item, Fit), sep="_")
+
+# Join the rating and eye-tracking data
+joined_data_fp <- left_join(first_pass, ready_to_combine, by = "Item_Condition") %>%
+  separate(col = "Item_Condition", into = (c("Item", "Condition")), sep = "_") %>%
+  mutate(Condition = factor(Condition))
+
+model_antecedent <- lmer(Antecedent ~ mean_score + (1 | P.s) + (1 | Item), data = joined_data_fp)
+summary(model_antecedent)
+check_model(model_antecedent)
+
+model_consequent<- lmer(Consequent ~ mean_score + (1 | P.s) + (1 | Item), data = joined_data_fp)
+summary(model_consequent)
+check_model(model_consequent)
+
+model_spillover <- lmer(spillover ~ mean_score + (1 | P.s) + (1 | Item), data = joined_data_fp)
+summary(model_spillover)
+check_model(model_spillover)
+
+# Regression path
+regression_path <- read_csv("eye_data/RPs_plus_ratings.csv") %>%
+  unite(col = "Item_Condition", c(Item, Fit), sep="_")
+
+# Join the rating and eye-tracking data
+joined_data_rp <- left_join(regression_path , ready_to_combine, by = "Item_Condition") %>%
+  separate(col = "Item_Condition", into = (c("Item", "Condition")), sep = "_") %>%
+  mutate(Condition = factor(Condition))
+
+model_antecedent <- lmer(Antecedent ~ mean_score + (1 | P.s) + (1 | Item), data = joined_data_rp)
+summary(model_antecedent)
+check_model(model_antecedent)
+
+model_consequent<- lmer(Consequent ~ mean_score + (1 | P.s) + (1 | Item), data = joined_data_rp)
+summary(model_consequent)
+check_model(model_consequent)
+
+model_spillover <- lmer(spillover ~ mean_score + (1 | P.s) + (1 | Item), data = joined_data_rp)
+summary(model_spillover)
+check_model(model_spillover)
+
+# Total time
+total_time <- read_csv("eye_data/TTs_plus_ratings.csv") %>%
+  unite(col = "Item_Condition", c(Item, Fit), sep="_")
+
+# Join the rating and eye-tracking data
+joined_data_tt <- left_join(total_time , ready_to_combine, by = "Item_Condition") %>%
+  separate(col = "Item_Condition", into = (c("Item", "Condition")), sep = "_") %>%
+  mutate(Condition = factor(Condition))
+
+model_antecedent <- lmer(Antecedent ~ mean_score + (1 | P.s) + (1 | Item), data = joined_data_tt)
+summary(model_antecedent)
+check_model(model_antecedent)
+
+model_consequent<- lmer(Consequent ~ mean_score + (1 | P.s) , data = joined_data_tt)
+summary(model_consequent)
+check_model(model_consequent)
+
+model_spillover <- lmer(spillover ~ mean_score + (1 | P.s) + (1 | Item), data = joined_data_tt)
+summary(model_spillover)
+check_model(model_spillover)
 
 

@@ -1,13 +1,14 @@
 ---
-title: "Goodness of fit study"
-author: ""
-date: "01/05/2020"
+title: "Goodness of fit study - Truth as Predictor of Reading Times"
+author: "Andrew Stewart"
+date: "04/05/2020"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
 
 ```{r, message = FALSE, warning = FALSE}
 library(tidyverse)
@@ -20,40 +21,41 @@ library(performance)
 
 First is Igor's code:
 
-```{r, warning=FALSE, message=FALSE}
-data <- read_csv("Explanation_QUALITY.csv")
-data <- data[3:nrow(data),]
-# nrow(data) # 157
+```{r, message=FALSE}
+dataT <- read_csv("Explanation_TRUTH.csv")
+dataT <- dataT[3:nrow(dataT),]
+#nrow(dataT) # 158
 
-dat0 <- filter(data, Finished == 1)
-# nrow(dat0) # 142
-dat <- filter(dat0, check == "7" & serious == "1" & UserLanguage == "EN")
-# nrow(dat) # 134
+dat0T <- filter(dataT, Finished == 1)
+nrow(dat0T) # 144
+datT <- filter(dat0T, check == "7" & serious == "1" & UserLanguage == "EN")
+#nrow(datT) # 138
 
 # time (in secs) spent on survey
-describe(as.numeric(as.data.frame(dat)[,6]))
+describe(as.numeric(as.data.frame(datT)[,6]))
 
 # gender
-table(dat$Gender)
+table(datT$Gender)
 
 # age
-describe(as.numeric(dat$Age))
+describe(as.numeric(datT$Age))
 
 # mean responses
-res <- sapply(23:58, function(x) mean(as.numeric(as.data.frame(dat)[,x]), na.rm = T))
+resT <- sapply(23:58, function(x) mean(as.numeric(as.data.frame(datT)[,x]), na.rm = T))
 
 # in the survey, we interchanged strong and weak explanations in the two groups
-strong <- res[c(seq(1, 17, 2), seq(20, 36, 2))]
-weak <- res[c(seq(2, 18, 2), seq(19, 35, 2))]
+strongT <- resT[c(seq(1, 17, 2), seq(20, 36, 2))]
+weakT <- resT[c(seq(2, 18, 2), seq(19, 35, 2))]
 
-results <- c(strong, weak)
+resultsT <- c(strongT, weakT)
 ```
 
 # Andrew's code to tidy the df so we can combine it with the eye-tracking data.
 
 ```{r, message=FALSE}
-summary <- dat %>% 
-  pivot_longer(cols = colnames(dat)[23:58], names_to = "Item", values_to = "Score") %>%
+#Truth ####
+summary <- datT %>% 
+  pivot_longer(cols = colnames(datT)[23:58], names_to = "Item", values_to = "Score") %>%
   select(Item, Score) %>%
   mutate(Item = factor(Item),
          Score = as.integer(Score)) %>%
@@ -63,7 +65,7 @@ summary <- dat %>%
 
 summary$Item <- str_replace(summary$Item, "A_", "_A-")
 summary$Item <- str_replace(summary$Item, "B_", "_B-")
-  
+
 summary <- summary %>%
   separate(col = Item, into = c("Item", "Condition"), sep = "_") 
 
@@ -77,10 +79,7 @@ ready_to_combine <- summary %>%
 Read in the eye tracking data and combine it with our MTurk ratings data.
 
 # First Pass
-```{r, message=FALSE}
-# Read in and combine with eye-tracking data
-
-# First pass
+```{r}
 first_pass <- read_csv("eye_data/FPs_plus_ratings.csv") %>%
   unite(col = "Item_Condition", c(Item, Fit), sep="_")
 
@@ -91,7 +90,7 @@ joined_data_fp <- left_join(first_pass, ready_to_combine, by = "Item_Condition")
 ```
 
 ## Antecedent
-```{r, warning=FALSE, message=FALSE}
+```{r, message=FALSE, warning=FALSE}
 model_antecedent <- lmer(Antecedent ~ mean_score + (1 | P.s) + (1 | Item), data = joined_data_fp)
 summary(model_antecedent)
 #check_model(model_antecedent)
@@ -100,13 +99,13 @@ summary(model_antecedent)
 No effect.
 
 ## Consequent
-```{r, warning=FALSE, message=FALSE}
-model_consequent <- lmer(Consequent ~ mean_score + (1 | P.s) + (1 | Item), data = joined_data_fp)
-summary(model_consequent )
-#check_model(model_consequent )
+```{r}
+model_consequent<- lmer(Consequent ~ mean_score + (1 | P.s) + (1 | Item), data = joined_data_fp)
+summary(model_consequent)
+#check_model(model_consequent)
 ```
 
-No effect
+No effect.
 
 ## Spillover
 ```{r}
@@ -135,7 +134,7 @@ summary(model_antecedent)
 #check_model(model_antecedent)
 ```
 
-No effect
+No effect.
 
 ## Consequent
 ```{r}
@@ -144,7 +143,7 @@ summary(model_consequent)
 #check_model(model_consequent)
 ```
 
-Nice effect - as goodness of rating goes up, reading time goes down
+Nice effect - as truth rating goes up, reading time goes down
 
 ## Spillover
 ```{r}
@@ -153,7 +152,7 @@ summary(model_spillover)
 #check_model(model_spillover)
 ```
 
-Same effect - as goodness of rating goes up, reading time goes down
+Hint of a carry over effect (same as above.)
 
 # Total Time
 ```{r, message=FALSE, warning=FALSE}
@@ -173,16 +172,16 @@ summary(model_antecedent)
 #check_model(model_antecedent)
 ```
 
-Same effect - as goodness of rating goes up, reading time goes down
+No effect - but pattern same as previous.
 
-## Consequent - note simpler random effects structure
+## Consequent
 ```{r}
 model_consequent<- lmer(Consequent ~ mean_score + (1 | P.s) , data = joined_data_tt)
 summary(model_consequent)
 #check_model(model_consequent)
 ```
 
-No effect
+No effect.
 
 ## Spillover
 ```{r}
@@ -192,9 +191,3 @@ summary(model_spillover)
 ```
 
 No effect.
-
-# Summary of Goodness of fit as a predictor
-
-So we have a nice (consistent) story across a number of eye-tracking measures. For regression path times (time to exit a region to the right - so includes re-reading before going past the target region) we see that as goodness of fit ratings go up, reading time goes down.  On regression path, the same effect holds for the spillover region.
-
-On the total time measure (which is a measure of total time spent reading a region, incl re-reading) we find the same pattern as on regression path.  This time the effect emerges on the antecedent region (but nowhere else).  The effect on the antecedent times likely reflects re-reading of this region.  Again, as goodness of fit ratings go up, reading time goes down.
