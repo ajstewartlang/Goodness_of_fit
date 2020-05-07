@@ -39,4 +39,4 @@ vignettes/*.pdf
 old/
 
 # extra stuff
-both_predictors.R
+# both_predictors.R
