@@ -372,7 +372,8 @@ summary {
 <pre class="r"><code>library(tidyverse)
 library(lme4)
 library(psych)
-library(performance)</code></pre>
+library(performance)
+library(lmerTest)</code></pre>
 <div id="igors-code" class="section level2">
 <h2>Igor’s code</h2>
 <div id="explanatory-goodness" class="section level3">
@@ -515,7 +516,8 @@ joined_data_fp &lt;- left_join(first_pass, ready_to_combine, by = &quot;Item_Con
 
 model_antecedent &lt;- lmer(Antecedent ~ mean_quality + (1 | P.s), data = joined_data_fp)
 summary(model_antecedent)</code></pre>
-<pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
 ## Formula: Antecedent ~ mean_quality + (1 | P.s)
 ##    Data: joined_data_fp
 ## 
@@ -532,18 +534,25 @@ summary(model_antecedent)</code></pre>
 ## Number of obs: 418, groups:  P.s, 24
 ## 
 ## Fixed effects:
-##              Estimate Std. Error t value
-## (Intercept)    700.55     113.20   6.189
-## mean_quality   -24.97      23.43  -1.066
+##              Estimate Std. Error     df t value Pr(&gt;|t|)    
+## (Intercept)    700.55     113.20 378.98   6.189 1.58e-09 ***
+## mean_quality   -24.97      23.43 395.79  -1.066    0.287    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr)
 ## mean_qualty -0.936</code></pre>
 <pre class="r"><code>#check_model(model_antecedent)
 
-model_consequent&lt;- lmer(Consequent ~ mean_quality + (1 | P.s) + (1 | Item), data = joined_data_fp)
+AIC(model_antecedent)</code></pre>
+<pre><code>## [1] 6152.681</code></pre>
+<pre class="r"><code>BIC(model_antecedent)</code></pre>
+<pre><code>## [1] 6168.823</code></pre>
+<pre class="r"><code>model_consequent&lt;- lmer(Consequent ~ mean_quality + (1 | P.s) + (1 | Item), data = joined_data_fp)
 summary(model_consequent)</code></pre>
-<pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
 ## Formula: Consequent ~ mean_quality + (1 | P.s) + (1 | Item)
 ##    Data: joined_data_fp
 ## 
@@ -561,18 +570,25 @@ summary(model_consequent)</code></pre>
 ## Number of obs: 425, groups:  P.s, 24; Item, 18
 ## 
 ## Fixed effects:
-##              Estimate Std. Error t value
-## (Intercept)   1013.49     144.81   6.999
-## mean_quality   -41.96      28.74  -1.460
+##              Estimate Std. Error      df t value Pr(&gt;|t|)    
+## (Intercept)   1013.49     144.81  299.89   6.999 1.69e-11 ***
+## mean_quality   -41.96      28.74  403.54  -1.460    0.145    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr)
 ## mean_qualty -0.898</code></pre>
 <pre class="r"><code>#check_model(model_consequent)
 
-model_spillover &lt;- lmer(spillover ~ mean_quality + (1 | P.s) + (1 | Item), data = joined_data_fp)
+AIC(model_consequent)</code></pre>
+<pre><code>## [1] 6377.431</code></pre>
+<pre class="r"><code>BIC(model_consequent)</code></pre>
+<pre><code>## [1] 6397.692</code></pre>
+<pre class="r"><code>model_spillover &lt;- lmer(spillover ~ mean_quality + (1 | P.s) + (1 | Item), data = joined_data_fp)
 summary(model_spillover)</code></pre>
-<pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
 ## Formula: spillover ~ mean_quality + (1 | P.s) + (1 | Item)
 ##    Data: joined_data_fp
 ## 
@@ -590,14 +606,21 @@ summary(model_spillover)</code></pre>
 ## Number of obs: 427, groups:  P.s, 24; Item, 18
 ## 
 ## Fixed effects:
-##              Estimate Std. Error t value
-## (Intercept)   1934.98     308.48   6.273
-## mean_quality    30.43      59.55   0.511
+##              Estimate Std. Error      df t value Pr(&gt;|t|)    
+## (Intercept)   1934.98     308.48  280.55   6.273 1.34e-09 ***
+## mean_quality    30.43      59.55  402.82   0.511     0.61    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr)
 ## mean_qualty -0.874</code></pre>
-<pre class="r"><code>#check_model(model_spillover)</code></pre>
+<pre class="r"><code>#check_model(model_spillover)
+
+AIC(model_spillover)</code></pre>
+<pre><code>## [1] 7037.775</code></pre>
+<pre class="r"><code>BIC(model_spillover)</code></pre>
+<pre><code>## [1] 7058.059</code></pre>
 </div>
 <div id="regression-path" class="section level3">
 <h3>Regression path</h3>
@@ -621,7 +644,8 @@ joined_data_rp &lt;- left_join(regression_path , ready_to_combine, by = &quot;It
 
 model_antecedent &lt;- lmer(Antecedent ~ mean_quality + (1 | P.s) + (1 | Item), data = joined_data_rp)
 summary(model_antecedent)</code></pre>
-<pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
 ## Formula: Antecedent ~ mean_quality + (1 | P.s) + (1 | Item)
 ##    Data: joined_data_rp
 ## 
@@ -639,18 +663,25 @@ summary(model_antecedent)</code></pre>
 ## Number of obs: 418, groups:  P.s, 24; Item, 18
 ## 
 ## Fixed effects:
-##              Estimate Std. Error t value
-## (Intercept)    959.70     167.83   5.718
-## mean_quality   -17.70      33.84  -0.523
+##              Estimate Std. Error     df t value Pr(&gt;|t|)    
+## (Intercept)    959.70     167.83 294.62   5.718 2.64e-08 ***
+## mean_quality   -17.70      33.84 363.18  -0.523    0.601    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr)
 ## mean_qualty -0.913</code></pre>
 <pre class="r"><code>#check_model(model_antecedent)
 
-model_consequent&lt;- lmer(Consequent ~ mean_quality + (1 | P.s) + (1 | Item), data = joined_data_rp)
+AIC(model_antecedent)</code></pre>
+<pre><code>## [1] 6410.839</code></pre>
+<pre class="r"><code>BIC(model_antecedent)</code></pre>
+<pre><code>## [1] 6431.017</code></pre>
+<pre class="r"><code>model_consequent&lt;- lmer(Consequent ~ mean_quality + (1 | P.s) + (1 | Item), data = joined_data_rp)
 summary(model_consequent)</code></pre>
-<pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
 ## Formula: Consequent ~ mean_quality + (1 | P.s) + (1 | Item)
 ##    Data: joined_data_rp
 ## 
@@ -668,18 +699,25 @@ summary(model_consequent)</code></pre>
 ## Number of obs: 425, groups:  P.s, 24; Item, 18
 ## 
 ## Fixed effects:
-##              Estimate Std. Error t value
-## (Intercept)   1616.30     246.61   6.554
-## mean_quality  -125.10      51.09  -2.448
+##              Estimate Std. Error      df t value Pr(&gt;|t|)    
+## (Intercept)   1616.30     246.61  315.40   6.554 2.28e-10 ***
+## mean_quality  -125.10      51.09  374.53  -2.448   0.0148 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr)
 ## mean_qualty -0.938</code></pre>
 <pre class="r"><code>#check_model(model_consequent)
 
-model_spillover &lt;- lmer(spillover ~ mean_quality + (1 | P.s) + (1 | Item), data = joined_data_rp)
+AIC(model_consequent)</code></pre>
+<pre><code>## [1] 6867.907</code></pre>
+<pre class="r"><code>BIC(model_consequent)</code></pre>
+<pre><code>## [1] 6888.167</code></pre>
+<pre class="r"><code>model_spillover &lt;- lmer(spillover ~ mean_quality + (1 | P.s) + (1 | Item), data = joined_data_rp)
 summary(model_spillover)</code></pre>
-<pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
 ## Formula: spillover ~ mean_quality + (1 | P.s) + (1 | Item)
 ##    Data: joined_data_rp
 ## 
@@ -697,14 +735,21 @@ summary(model_spillover)</code></pre>
 ## Number of obs: 426, groups:  P.s, 24; Item, 18
 ## 
 ## Fixed effects:
-##              Estimate Std. Error t value
-## (Intercept)    3918.7      583.2   6.719
-## mean_quality   -225.2      115.8  -1.946
+##              Estimate Std. Error     df t value Pr(&gt;|t|)    
+## (Intercept)    3918.7      583.2  298.2   6.719 9.27e-11 ***
+## mean_quality   -225.2      115.8  394.0  -1.946   0.0524 .  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr)
 ## mean_qualty -0.898</code></pre>
-<pre class="r"><code>#check_model(model_spillover)</code></pre>
+<pre class="r"><code>#check_model(model_spillover)
+
+AIC(model_spillover)</code></pre>
+<pre><code>## [1] 7583.273</code></pre>
+<pre class="r"><code>BIC(model_spillover)</code></pre>
+<pre><code>## [1] 7603.545</code></pre>
 </div>
 <div id="total-time" class="section level3">
 <h3>Total Time</h3>
@@ -728,7 +773,8 @@ joined_data_tt &lt;- left_join(total_time , ready_to_combine, by = &quot;Item_Co
 
 model_antecedent &lt;- lmer(Antecedent ~ mean_quality + (1 | P.s) + (1 | Item), data = joined_data_tt)
 summary(model_antecedent)</code></pre>
-<pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
 ## Formula: Antecedent ~ mean_quality + (1 | P.s) + (1 | Item)
 ##    Data: joined_data_tt
 ## 
@@ -746,18 +792,25 @@ summary(model_antecedent)</code></pre>
 ## Number of obs: 431, groups:  P.s, 24; Item, 18
 ## 
 ## Fixed effects:
-##              Estimate Std. Error t value
-## (Intercept)   1182.58     158.50   7.461
-## mean_quality   -71.42      30.72  -2.325
+##              Estimate Std. Error      df t value Pr(&gt;|t|)    
+## (Intercept)   1182.58     158.50  282.25   7.461 1.07e-12 ***
+## mean_quality   -71.42      30.72  408.76  -2.325   0.0206 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr)
 ## mean_qualty -0.878</code></pre>
 <pre class="r"><code>#check_model(model_antecedent)
 
-model_consequent&lt;- lmer(Consequent ~ mean_quality + (1 | P.s) , data = joined_data_tt)
+AIC(model_antecedent)</code></pre>
+<pre><code>## [1] 6533.615</code></pre>
+<pre class="r"><code>BIC(model_antecedent)</code></pre>
+<pre><code>## [1] 6553.945</code></pre>
+<pre class="r"><code>model_consequent&lt;- lmer(Consequent ~ mean_quality + (1 | P.s) , data = joined_data_tt)
 summary(model_consequent)</code></pre>
-<pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
 ## Formula: Consequent ~ mean_quality + (1 | P.s)
 ##    Data: joined_data_tt
 ## 
@@ -774,18 +827,25 @@ summary(model_consequent)</code></pre>
 ## Number of obs: 431, groups:  P.s, 24
 ## 
 ## Fixed effects:
-##              Estimate Std. Error t value
-## (Intercept)   1109.66     150.17   7.389
-## mean_quality   -34.64      30.84  -1.123
+##              Estimate Std. Error      df t value Pr(&gt;|t|)    
+## (Intercept)   1109.66     150.17  375.36   7.389 9.65e-13 ***
+## mean_quality   -34.64      30.84  409.04  -1.123    0.262    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr)
 ## mean_qualty -0.930</code></pre>
 <pre class="r"><code>#check_model(model_consequent)
 
-model_spillover &lt;- lmer(spillover ~ mean_quality + (1 | P.s) + (1 | Item), data = joined_data_tt)
+AIC(model_consequent)</code></pre>
+<pre><code>## [1] 6603.717</code></pre>
+<pre class="r"><code>BIC(model_consequent)</code></pre>
+<pre><code>## [1] 6619.981</code></pre>
+<pre class="r"><code>model_spillover &lt;- lmer(spillover ~ mean_quality + (1 | P.s) + (1 | Item), data = joined_data_tt)
 summary(model_spillover)</code></pre>
-<pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
 ## Formula: spillover ~ mean_quality + (1 | P.s) + (1 | Item)
 ##    Data: joined_data_tt
 ## 
@@ -803,14 +863,21 @@ summary(model_spillover)</code></pre>
 ## Number of obs: 431, groups:  P.s, 24; Item, 18
 ## 
 ## Fixed effects:
-##              Estimate Std. Error t value
-## (Intercept)   2157.90     294.17   7.336
-## mean_quality    21.33      54.15   0.394
+##              Estimate Std. Error      df t value Pr(&gt;|t|)    
+## (Intercept)   2157.90     294.17  239.42   7.336  3.4e-12 ***
+## mean_quality    21.33      54.15  407.57   0.394    0.694    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr)
 ## mean_qualty -0.833</code></pre>
-<pre class="r"><code>#check_model(model_spillover)</code></pre>
+<pre class="r"><code>#check_model(model_spillover)
+
+AIC(model_spillover)</code></pre>
+<pre><code>## [1] 7029.714</code></pre>
+<pre class="r"><code>BIC(model_spillover)</code></pre>
+<pre><code>## [1] 7050.045</code></pre>
 </div>
 <div id="regressions-out" class="section level3">
 <h3>Regressions out</h3>
@@ -929,8 +996,8 @@ summary(model_spillover)</code></pre>
 ## mean_qualty -0.962</code></pre>
 </div>
 </div>
-<div id="now-with-explanation-quality-as-the-predictor." class="section level2">
-<h2>Now with explanation quality as the predictor.</h2>
+<div id="now-with-explanation-probability-as-the-predictor." class="section level2">
+<h2>Now with explanation probability as the predictor.</h2>
 <pre class="r"><code>summary &lt;- dataP %&gt;% 
   pivot_longer(cols = colnames(dataP)[23:58], names_to = &quot;Item&quot;, values_to = &quot;Score&quot;) %&gt;%
   select(Item, Score) %&gt;%
@@ -972,7 +1039,8 @@ joined_data_fp &lt;- left_join(first_pass, ready_to_combine, by = &quot;Item_Con
 
 model_antecedent &lt;- lmer(Antecedent ~ mean_probability + (1 | P.s) + (1 | Item), data = joined_data_fp)
 summary(model_antecedent)</code></pre>
-<pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
 ## Formula: Antecedent ~ mean_probability + (1 | P.s) + (1 | Item)
 ##    Data: joined_data_fp
 ## 
@@ -990,18 +1058,25 @@ summary(model_antecedent)</code></pre>
 ## Number of obs: 418, groups:  P.s, 24; Item, 18
 ## 
 ## Fixed effects:
-##                  Estimate Std. Error t value
-## (Intercept)        518.25     147.76   3.507
-## mean_probability    13.54      27.75   0.488
+##                  Estimate Std. Error     df t value Pr(&gt;|t|)    
+## (Intercept)        518.25     147.76 319.99   3.507 0.000517 ***
+## mean_probability    13.54      27.75 384.64   0.488 0.625828    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr)
 ## men_prbblty -0.924</code></pre>
 <pre class="r"><code>#check_model(model_antecedent)
 
-model_consequent&lt;- lmer(Consequent ~ mean_probability + (1 | P.s) + (1 | Item), data = joined_data_fp)
+AIC(model_antecedent)</code></pre>
+<pre><code>## [1] 6101.71</code></pre>
+<pre class="r"><code>BIC(model_antecedent)</code></pre>
+<pre><code>## [1] 6121.887</code></pre>
+<pre class="r"><code>model_consequent&lt;- lmer(Consequent ~ mean_probability + (1 | P.s) + (1 | Item), data = joined_data_fp)
 summary(model_consequent)</code></pre>
-<pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
 ## Formula: Consequent ~ mean_probability + (1 | P.s) + (1 | Item)
 ##    Data: joined_data_fp
 ## 
@@ -1019,18 +1094,25 @@ summary(model_consequent)</code></pre>
 ## Number of obs: 425, groups:  P.s, 24; Item, 18
 ## 
 ## Fixed effects:
-##                  Estimate Std. Error t value
-## (Intercept)       871.394    177.794   4.901
-## mean_probability   -9.722     33.710  -0.288
+##                  Estimate Std. Error      df t value Pr(&gt;|t|)    
+## (Intercept)       871.394    177.794 327.566   4.901  1.5e-06 ***
+## mean_probability   -9.722     33.710 389.608  -0.288    0.773    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr)
 ## men_prbblty -0.932</code></pre>
 <pre class="r"><code>#check_model(model_consequent)
 
-model_spillover &lt;- lmer(spillover ~ mean_probability + (1 | P.s) + (1 | Item), data = joined_data_fp)
+AIC(model_consequent)</code></pre>
+<pre><code>## [1] 6379.159</code></pre>
+<pre class="r"><code>BIC(model_consequent)</code></pre>
+<pre><code>## [1] 6399.419</code></pre>
+<pre class="r"><code>model_spillover &lt;- lmer(spillover ~ mean_probability + (1 | P.s) + (1 | Item), data = joined_data_fp)
 summary(model_spillover)</code></pre>
-<pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
 ## Formula: spillover ~ mean_probability + (1 | P.s) + (1 | Item)
 ##    Data: joined_data_fp
 ## 
@@ -1048,14 +1130,21 @@ summary(model_spillover)</code></pre>
 ## Number of obs: 427, groups:  P.s, 24; Item, 18
 ## 
 ## Fixed effects:
-##                  Estimate Std. Error t value
-## (Intercept)       1909.73     372.71   5.124
-## mean_probability    33.15      69.42   0.478
+##                  Estimate Std. Error      df t value Pr(&gt;|t|)    
+## (Intercept)       1909.73     372.71  320.17   5.124 5.18e-07 ***
+## mean_probability    33.15      69.42  386.94   0.478    0.633    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr)
 ## men_prbblty -0.916</code></pre>
-<pre class="r"><code>#check_model(model_spillover)</code></pre>
+<pre class="r"><code>#check_model(model_spillover)
+
+AIC(model_spillover)</code></pre>
+<pre><code>## [1] 7037.502</code></pre>
+<pre class="r"><code>BIC(model_spillover)</code></pre>
+<pre><code>## [1] 7057.786</code></pre>
 </div>
 <div id="regression-path-1" class="section level3">
 <h3>Regression path</h3>
@@ -1078,7 +1167,8 @@ joined_data_rp &lt;- left_join(regression_path , ready_to_combine, by = &quot;It
 
 model_antecedent &lt;- lmer(Antecedent ~ mean_probability + (1 | P.s) + (1 | Item), data = joined_data_rp)
 summary(model_antecedent)</code></pre>
-<pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
 ## Formula: Antecedent ~ mean_probability + (1 | P.s) + (1 | Item)
 ##    Data: joined_data_rp
 ## 
@@ -1096,18 +1186,25 @@ summary(model_antecedent)</code></pre>
 ## Number of obs: 418, groups:  P.s, 24; Item, 18
 ## 
 ## Fixed effects:
-##                  Estimate Std. Error t value
-## (Intercept)       890.010    204.201   4.359
-## mean_probability   -2.124     39.087  -0.054
+##                  Estimate Std. Error      df t value Pr(&gt;|t|)    
+## (Intercept)       890.010    204.201 276.209   4.359 1.85e-05 ***
+## mean_probability   -2.124     39.087 302.958  -0.054    0.957    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr)
 ## men_prbblty -0.942</code></pre>
 <pre class="r"><code>#check_model(model_antecedent)
 
-model_consequent&lt;- lmer(Consequent ~ mean_probability + (1 | P.s) + (1 | Item), data = joined_data_rp)
+AIC(model_antecedent)</code></pre>
+<pre><code>## [1] 6410.822</code></pre>
+<pre class="r"><code>BIC(model_antecedent)</code></pre>
+<pre><code>## [1] 6431</code></pre>
+<pre class="r"><code>model_consequent&lt;- lmer(Consequent ~ mean_probability + (1 | P.s) + (1 | Item), data = joined_data_rp)
 summary(model_consequent)</code></pre>
-<pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
 ## Formula: Consequent ~ mean_probability + (1 | P.s) + (1 | Item)
 ##    Data: joined_data_rp
 ## 
@@ -1125,18 +1222,25 @@ summary(model_consequent)</code></pre>
 ## Number of obs: 425, groups:  P.s, 24; Item, 18
 ## 
 ## Fixed effects:
-##                  Estimate Std. Error t value
-## (Intercept)       1723.54     304.18   5.666
-## mean_probability  -136.94      59.27  -2.310
+##                  Estimate Std. Error      df t value Pr(&gt;|t|)    
+## (Intercept)       1723.54     304.18  290.79   5.666 3.51e-08 ***
+## mean_probability  -136.94      59.27  323.64  -2.310   0.0215 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr)
 ## men_prbblty -0.958</code></pre>
 <pre class="r"><code>#check_model(model_consequent)
 
-model_spillover &lt;- lmer(spillover ~ mean_probability + (1 | P.s) + (1 | Item), data = joined_data_rp)
+AIC(model_consequent)</code></pre>
+<pre><code>## [1] 6868.249</code></pre>
+<pre class="r"><code>BIC(model_consequent)</code></pre>
+<pre><code>## [1] 6888.51</code></pre>
+<pre class="r"><code>model_spillover &lt;- lmer(spillover ~ mean_probability + (1 | P.s) + (1 | Item), data = joined_data_rp)
 summary(model_spillover)</code></pre>
-<pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
 ## Formula: spillover ~ mean_probability + (1 | P.s) + (1 | Item)
 ##    Data: joined_data_rp
 ## 
@@ -1154,14 +1258,21 @@ summary(model_spillover)</code></pre>
 ## Number of obs: 426, groups:  P.s, 24; Item, 18
 ## 
 ## Fixed effects:
-##                  Estimate Std. Error t value
-## (Intercept)        3944.3      710.2   5.554
-## mean_probability   -212.6      134.5  -1.580
+##                  Estimate Std. Error     df t value Pr(&gt;|t|)    
+## (Intercept)        3944.3      710.2  310.9   5.554    6e-08 ***
+## mean_probability   -212.6      134.5  361.8  -1.580    0.115    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr)
 ## men_prbblty -0.931</code></pre>
-<pre class="r"><code>#check_model(model_spillover)</code></pre>
+<pre class="r"><code>#check_model(model_spillover)
+
+AIC(model_spillover)</code></pre>
+<pre><code>## [1] 7584.268</code></pre>
+<pre class="r"><code>BIC(model_spillover)</code></pre>
+<pre><code>## [1] 7604.541</code></pre>
 </div>
 <div id="total-time-1" class="section level3">
 <h3>Total Time</h3>
@@ -1184,7 +1295,8 @@ joined_data_tt &lt;- left_join(total_time , ready_to_combine, by = &quot;Item_Co
 
 model_antecedent &lt;- lmer(Antecedent ~ mean_probability + (1 | P.s) + (1 | Item), data = joined_data_tt)
 summary(model_antecedent)</code></pre>
-<pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
 ## Formula: Antecedent ~ mean_probability + (1 | P.s) + (1 | Item)
 ##    Data: joined_data_tt
 ## 
@@ -1202,18 +1314,25 @@ summary(model_antecedent)</code></pre>
 ## Number of obs: 431, groups:  P.s, 24; Item, 18
 ## 
 ## Fixed effects:
-##                  Estimate Std. Error t value
-## (Intercept)       1186.45     192.83   6.153
-## mean_probability   -66.53      35.97  -1.850
+##                  Estimate Std. Error      df t value Pr(&gt;|t|)    
+## (Intercept)       1186.45     192.83  324.59   6.153 2.24e-09 ***
+## mean_probability   -66.53      35.97  399.18  -1.850   0.0651 .  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr)
 ## men_prbblty -0.918</code></pre>
 <pre class="r"><code>#check_model(model_antecedent)
 
-model_consequent&lt;- lmer(Consequent ~ mean_probability + (1 | P.s) + (1 | Item), data = joined_data_tt)
+AIC(model_antecedent)</code></pre>
+<pre><code>## [1] 6535.242</code></pre>
+<pre class="r"><code>BIC(model_antecedent)</code></pre>
+<pre><code>## [1] 6555.572</code></pre>
+<pre class="r"><code>model_consequent&lt;- lmer(Consequent ~ mean_probability + (1 | P.s) + (1 | Item), data = joined_data_tt)
 summary(model_consequent)</code></pre>
-<pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
 ## Formula: Consequent ~ mean_probability + (1 | P.s) + (1 | Item)
 ##    Data: joined_data_tt
 ## 
@@ -1231,18 +1350,25 @@ summary(model_consequent)</code></pre>
 ## Number of obs: 431, groups:  P.s, 24; Item, 18
 ## 
 ## Fixed effects:
-##                  Estimate Std. Error t value
-## (Intercept)       1154.66     193.49   5.968
-## mean_probability   -40.86      35.68  -1.145
+##                  Estimate Std. Error      df t value Pr(&gt;|t|)    
+## (Intercept)       1154.66     193.49  315.66   5.968 6.46e-09 ***
+## mean_probability   -40.86      35.68  404.43  -1.145    0.253    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr)
 ## men_prbblty -0.907</code></pre>
 <pre class="r"><code>#check_model(model_consequent)
 
-model_spillover &lt;- lmer(spillover ~ mean_probability + (1 | P.s) + (1 | Item), data = joined_data_tt)
+AIC(model_consequent)</code></pre>
+<pre><code>## [1] 6526.413</code></pre>
+<pre class="r"><code>BIC(model_consequent)</code></pre>
+<pre><code>## [1] 6546.744</code></pre>
+<pre class="r"><code>model_spillover &lt;- lmer(spillover ~ mean_probability + (1 | P.s) + (1 | Item), data = joined_data_tt)
 summary(model_spillover)</code></pre>
-<pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
 ## Formula: spillover ~ mean_probability + (1 | P.s) + (1 | Item)
 ##    Data: joined_data_tt
 ## 
@@ -1260,14 +1386,21 @@ summary(model_spillover)</code></pre>
 ## Number of obs: 431, groups:  P.s, 24; Item, 18
 ## 
 ## Fixed effects:
-##                  Estimate Std. Error t value
-## (Intercept)       2190.00     351.86   6.224
-## mean_probability    13.10      63.44   0.207
+##                  Estimate Std. Error      df t value Pr(&gt;|t|)    
+## (Intercept)       2190.00     351.86  305.67   6.224  1.6e-09 ***
+## mean_probability    13.10      63.44  404.46   0.207    0.836    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr)
 ## men_prbblty -0.887</code></pre>
-<pre class="r"><code>#check_model(model_spillover)</code></pre>
+<pre class="r"><code>#check_model(model_spillover)
+
+AIC(model_spillover)</code></pre>
+<pre><code>## [1] 7029.51</code></pre>
+<pre class="r"><code>BIC(model_spillover)</code></pre>
+<pre><code>## [1] 7049.841</code></pre>
 </div>
 <div id="regressions-out-1" class="section level3">
 <h3>Regressions out</h3>
@@ -1449,7 +1582,8 @@ joined_data_fp &lt;- left_join(first_pass, ready_to_combine, by = &quot;Item_Con
 
 model_antecedent &lt;- lmer(Antecedent ~ mean_quality + mean_probability + (1 | P.s) + (1 | Item), data = joined_data_fp)
 summary(model_antecedent)</code></pre>
-<pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
 ## Formula: Antecedent ~ mean_quality + mean_probability + (1 | P.s) + (1 |  
 ##     Item)
 ##    Data: joined_data_fp
@@ -1468,10 +1602,12 @@ summary(model_antecedent)</code></pre>
 ## Number of obs: 418, groups:  P.s, 24; Item, 18
 ## 
 ## Fixed effects:
-##                  Estimate Std. Error t value
-## (Intercept)        478.00     151.21   3.161
-## mean_quality       -64.74      52.53  -1.232
-## mean_probability    81.31      61.60   1.320
+##                  Estimate Std. Error     df t value Pr(&gt;|t|)   
+## (Intercept)        478.00     151.21 308.74   3.161  0.00173 **
+## mean_quality       -64.74      52.53 403.02  -1.232  0.21850   
+## mean_probability    81.31      61.60 383.43   1.320  0.18763   
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr) mn_qlt
@@ -1484,7 +1620,8 @@ model_consequent&lt;- lmer(Consequent ~ mean_quality + mean_probability + (1 | P
 ## control$checkConv, : Model failed to converge with max|grad| = 0.00467191
 ## (tol = 0.002, component 1)</code></pre>
 <pre class="r"><code>summary(model_consequent)</code></pre>
-<pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
 ## Formula: Consequent ~ mean_quality + mean_probability + (1 | P.s) + (1 |  
 ##     Item)
 ##    Data: joined_data_fp
@@ -1503,10 +1640,12 @@ model_consequent&lt;- lmer(Consequent ~ mean_quality + mean_probability + (1 | P
 ## Number of obs: 425, groups:  P.s, 24; Item, 18
 ## 
 ## Fixed effects:
-##                  Estimate Std. Error t value
-## (Intercept)        758.07     179.12   4.232
-## mean_quality      -178.15      63.85  -2.790
-## mean_probability   177.31      74.56   2.378
+##                  Estimate Std. Error      df t value Pr(&gt;|t|)    
+## (Intercept)        758.07     179.12  307.15   4.232 3.06e-05 ***
+## mean_quality      -178.15      63.85  399.33  -2.790  0.00552 ** 
+## mean_probability   177.31      74.56  365.62   2.378  0.01792 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr) mn_qlt
@@ -1518,7 +1657,8 @@ model_consequent&lt;- lmer(Consequent ~ mean_quality + mean_probability + (1 | P
 
 model_spillover &lt;- lmer(spillover ~ mean_quality + mean_probability + (1 | P.s) + (1 | Item), data = joined_data_fp)
 summary(model_spillover)</code></pre>
-<pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
 ## Formula: spillover ~ mean_quality + mean_probability + (1 | P.s) + (1 |  
 ##     Item)
 ##    Data: joined_data_fp
@@ -1537,10 +1677,12 @@ summary(model_spillover)</code></pre>
 ## Number of obs: 427, groups:  P.s, 24; Item, 18
 ## 
 ## Fixed effects:
-##                  Estimate Std. Error t value
-## (Intercept)      1925.364    382.147   5.038
-## mean_quality       25.209    134.430   0.188
-## mean_probability    6.763    156.696   0.043
+##                  Estimate Std. Error       df t value Pr(&gt;|t|)    
+## (Intercept)      1925.364    382.147  308.495   5.038 8.01e-07 ***
+## mean_quality       25.209    134.430  403.226   0.188    0.851    
+## mean_probability    6.763    156.696  378.190   0.043    0.966    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr) mn_qlt
@@ -1569,7 +1711,8 @@ joined_data_rp &lt;- left_join(regression_path , ready_to_combine, by = &quot;It
 
 model_antecedent &lt;- lmer(Antecedent ~ mean_quality + mean_probability + (1 | P.s) + (1 | Item), data = joined_data_rp)
 summary(model_antecedent)</code></pre>
-<pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
 ## Formula: Antecedent ~ mean_quality + mean_probability + (1 | P.s) + (1 |  
 ##     Item)
 ##    Data: joined_data_rp
@@ -1588,10 +1731,12 @@ summary(model_antecedent)</code></pre>
 ## Number of obs: 418, groups:  P.s, 24; Item, 18
 ## 
 ## Fixed effects:
-##                  Estimate Std. Error t value
-## (Intercept)        848.95     207.62   4.089
-## mean_quality       -77.75      74.35  -1.046
-## mean_probability    77.77      85.80   0.906
+##                  Estimate Std. Error     df t value Pr(&gt;|t|)    
+## (Intercept)        848.95     207.62 249.32   4.089 5.85e-05 ***
+## mean_quality       -77.75      74.35 332.99  -1.046    0.296    
+## mean_probability    77.77      85.80 264.08   0.906    0.366    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr) mn_qlt
@@ -1601,7 +1746,8 @@ summary(model_antecedent)</code></pre>
 
 model_consequent&lt;- lmer(Consequent ~ mean_quality + mean_probability + (1 | P.s) + (1 | Item), data = joined_data_rp)
 summary(model_consequent)</code></pre>
-<pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
 ## Formula: Consequent ~ mean_quality + mean_probability + (1 | P.s) + (1 |  
 ##     Item)
 ##    Data: joined_data_rp
@@ -1620,10 +1766,12 @@ summary(model_consequent)</code></pre>
 ## Number of obs: 425, groups:  P.s, 24; Item, 18
 ## 
 ## Fixed effects:
-##                  Estimate Std. Error t value
-## (Intercept)       1669.62     309.41   5.396
-## mean_quality       -95.98     112.72  -0.852
-## mean_probability   -37.64     130.26  -0.289
+##                  Estimate Std. Error      df t value Pr(&gt;|t|)    
+## (Intercept)       1669.62     309.41  257.89   5.396 1.54e-07 ***
+## mean_quality       -95.98     112.72  337.97  -0.852    0.395    
+## mean_probability   -37.64     130.26  271.47  -0.289    0.773    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr) mn_qlt
@@ -1633,7 +1781,8 @@ summary(model_consequent)</code></pre>
 
 model_spillover &lt;- lmer(spillover ~ mean_quality + mean_probability + (1 | P.s) + (1 | Item), data = joined_data_rp)
 summary(model_spillover)</code></pre>
-<pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
 ## Formula: spillover ~ mean_quality + mean_probability + (1 | P.s) + (1 |  
 ##     Item)
 ##    Data: joined_data_rp
@@ -1652,10 +1801,12 @@ summary(model_spillover)</code></pre>
 ## Number of obs: 426, groups:  P.s, 24; Item, 18
 ## 
 ## Fixed effects:
-##                  Estimate Std. Error t value
-## (Intercept)        3758.7      724.4   5.189
-## mean_quality       -311.5      259.6  -1.200
-## mean_probability    111.9      301.3   0.372
+##                  Estimate Std. Error     df t value Pr(&gt;|t|)    
+## (Intercept)        3758.7      724.4  291.1   5.189 3.97e-07 ***
+## mean_quality       -311.5      259.6  381.8  -1.200    0.231    
+## mean_probability    111.9      301.3  336.9   0.372    0.710    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr) mn_qlt
@@ -1684,7 +1835,8 @@ joined_data_tt &lt;- left_join(total_time , ready_to_combine, by = &quot;Item_Co
 
 model_antecedent &lt;- lmer(Antecedent ~ mean_quality + mean_probability + (1 | P.s) + (1 | Item), data = joined_data_tt)
 summary(model_antecedent)</code></pre>
-<pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
 ## Formula: Antecedent ~ mean_quality + mean_probability + (1 | P.s) + (1 |  
 ##     Item)
 ##    Data: joined_data_tt
@@ -1703,10 +1855,12 @@ summary(model_antecedent)</code></pre>
 ## Number of obs: 431, groups:  P.s, 24; Item, 18
 ## 
 ## Fixed effects:
-##                  Estimate Std. Error t value
-## (Intercept)       1122.71     197.27   5.691
-## mean_quality      -102.94      69.46  -1.482
-## mean_probability    41.18      81.13   0.508
+##                  Estimate Std. Error      df t value Pr(&gt;|t|)    
+## (Intercept)       1122.71     197.27  314.61   5.691 2.89e-08 ***
+## mean_quality      -102.94      69.46  415.64  -1.482    0.139    
+## mean_probability    41.18      81.13  397.70   0.508    0.612    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr) mn_qlt
@@ -1716,7 +1870,8 @@ summary(model_antecedent)</code></pre>
 
 model_consequent&lt;- lmer(Consequent ~ mean_quality + mean_probability + (1 | P.s) + (1 | Item), data = joined_data_tt)
 summary(model_consequent)</code></pre>
-<pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
 ## Formula: Consequent ~ mean_quality + mean_probability + (1 | P.s) + (1 |  
 ##     Item)
 ##    Data: joined_data_tt
@@ -1735,10 +1890,12 @@ summary(model_consequent)</code></pre>
 ## Number of obs: 431, groups:  P.s, 24; Item, 18
 ## 
 ## Fixed effects:
-##                  Estimate Std. Error t value
-## (Intercept)       1080.53     197.35   5.475
-## mean_quality      -110.65      68.73  -1.610
-## mean_probability    76.04      80.50   0.945
+##                  Estimate Std. Error      df t value Pr(&gt;|t|)    
+## (Intercept)       1080.53     197.35  311.32   5.475 9.01e-08 ***
+## mean_quality      -110.65      68.73  419.19  -1.610    0.108    
+## mean_probability    76.04      80.50  407.43   0.945    0.345    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr) mn_qlt
@@ -1748,7 +1905,8 @@ summary(model_consequent)</code></pre>
 
 model_spillover &lt;- lmer(spillover ~ mean_quality + mean_probability + (1 | P.s) + (1 | Item), data = joined_data_tt)
 summary(model_spillover)</code></pre>
-<pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
 ## Formula: spillover ~ mean_quality + mean_probability + (1 | P.s) + (1 |  
 ##     Item)
 ##    Data: joined_data_tt
@@ -1767,10 +1925,12 @@ summary(model_spillover)</code></pre>
 ## Number of obs: 431, groups:  P.s, 24; Item, 18
 ## 
 ## Fixed effects:
-##                  Estimate Std. Error t value
-## (Intercept)       2227.54     361.09   6.169
-## mean_quality        58.14     122.95   0.473
-## mean_probability   -48.04     144.01  -0.334
+##                  Estimate Std. Error      df t value Pr(&gt;|t|)    
+## (Intercept)       2227.54     361.09  302.45   6.169  2.2e-09 ***
+## mean_quality        58.14     122.95  415.10   0.473    0.637    
+## mean_probability   -48.04     144.01  406.06  -0.334    0.739    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr) mn_qlt

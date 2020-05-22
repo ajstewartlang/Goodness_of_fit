@@ -14,6 +14,7 @@ library(tidyverse)
 library(lme4)
 library(psych)
 library(performance)
+library(lmerTest)
 ```
 
 ## Igor's code
@@ -134,13 +135,22 @@ model_antecedent <- lmer(Antecedent ~ mean_quality + (1 | P.s), data = joined_da
 summary(model_antecedent)
 #check_model(model_antecedent)
 
+AIC(model_antecedent)
+BIC(model_antecedent)
+
 model_consequent<- lmer(Consequent ~ mean_quality + (1 | P.s) + (1 | Item), data = joined_data_fp)
 summary(model_consequent)
 #check_model(model_consequent)
 
+AIC(model_consequent)
+BIC(model_consequent)
+
 model_spillover <- lmer(spillover ~ mean_quality + (1 | P.s) + (1 | Item), data = joined_data_fp)
 summary(model_spillover)
 #check_model(model_spillover)
+
+AIC(model_spillover)
+BIC(model_spillover)
 
 ```
 
@@ -160,13 +170,23 @@ model_antecedent <- lmer(Antecedent ~ mean_quality + (1 | P.s) + (1 | Item), dat
 summary(model_antecedent)
 #check_model(model_antecedent)
 
+AIC(model_antecedent)
+BIC(model_antecedent)
+
 model_consequent<- lmer(Consequent ~ mean_quality + (1 | P.s) + (1 | Item), data = joined_data_rp)
 summary(model_consequent)
 #check_model(model_consequent)
 
+AIC(model_consequent)
+BIC(model_consequent)
+
 model_spillover <- lmer(spillover ~ mean_quality + (1 | P.s) + (1 | Item), data = joined_data_rp)
 summary(model_spillover)
 #check_model(model_spillover)
+
+AIC(model_spillover)
+BIC(model_spillover)
+
 ```
 
 ### Total Time
@@ -185,13 +205,22 @@ model_antecedent <- lmer(Antecedent ~ mean_quality + (1 | P.s) + (1 | Item), dat
 summary(model_antecedent)
 #check_model(model_antecedent)
 
+AIC(model_antecedent)
+BIC(model_antecedent)
+
 model_consequent<- lmer(Consequent ~ mean_quality + (1 | P.s) , data = joined_data_tt)
 summary(model_consequent)
 #check_model(model_consequent)
 
+AIC(model_consequent)
+BIC(model_consequent)
+
 model_spillover <- lmer(spillover ~ mean_quality + (1 | P.s) + (1 | Item), data = joined_data_tt)
 summary(model_spillover)
 #check_model(model_spillover)
+
+AIC(model_spillover)
+BIC(model_spillover)
 ```
 
 ### Regressions out
@@ -216,7 +245,7 @@ model_spillover <- glmer(spillover ~ mean_quality + (1 | P.s) + (1 | Item), fami
 summary(model_spillover)
 ```
 
-## Now with explanation quality as the predictor.
+## Now with explanation probability as the predictor.
 
 ```{r}
 summary <- dataP %>% 
@@ -256,13 +285,22 @@ model_antecedent <- lmer(Antecedent ~ mean_probability + (1 | P.s) + (1 | Item),
 summary(model_antecedent)
 #check_model(model_antecedent)
 
+AIC(model_antecedent)
+BIC(model_antecedent)
+
 model_consequent<- lmer(Consequent ~ mean_probability + (1 | P.s) + (1 | Item), data = joined_data_fp)
 summary(model_consequent)
 #check_model(model_consequent)
 
+AIC(model_consequent)
+BIC(model_consequent)
+
 model_spillover <- lmer(spillover ~ mean_probability + (1 | P.s) + (1 | Item), data = joined_data_fp)
 summary(model_spillover)
 #check_model(model_spillover)
+
+AIC(model_spillover)
+BIC(model_spillover)
 ```
 
 ### Regression path
@@ -280,13 +318,22 @@ model_antecedent <- lmer(Antecedent ~ mean_probability + (1 | P.s) + (1 | Item),
 summary(model_antecedent)
 #check_model(model_antecedent)
 
+AIC(model_antecedent)
+BIC(model_antecedent)
+
 model_consequent<- lmer(Consequent ~ mean_probability + (1 | P.s) + (1 | Item), data = joined_data_rp)
 summary(model_consequent)
 #check_model(model_consequent)
 
+AIC(model_consequent)
+BIC(model_consequent)
+
 model_spillover <- lmer(spillover ~ mean_probability + (1 | P.s) + (1 | Item), data = joined_data_rp)
 summary(model_spillover)
 #check_model(model_spillover)
+
+AIC(model_spillover)
+BIC(model_spillover)
 ```
 
 ### Total Time
@@ -304,13 +351,22 @@ model_antecedent <- lmer(Antecedent ~ mean_probability + (1 | P.s) + (1 | Item),
 summary(model_antecedent)
 #check_model(model_antecedent)
 
+AIC(model_antecedent)
+BIC(model_antecedent)
+
 model_consequent<- lmer(Consequent ~ mean_probability + (1 | P.s) + (1 | Item), data = joined_data_tt)
 summary(model_consequent)
 #check_model(model_consequent)
 
+AIC(model_consequent)
+BIC(model_consequent)
+
 model_spillover <- lmer(spillover ~ mean_probability + (1 | P.s) + (1 | Item), data = joined_data_tt)
 summary(model_spillover)
 #check_model(model_spillover)
+
+AIC(model_spillover)
+BIC(model_spillover)
 ```
 
 ### Regressions out
